@@ -1,0 +1,280 @@
+/* ==========================================================================
+   TQ Dropshipping — minimal landing page stylesheet
+   单页极简版：只服务 index.html / zh/index.html 两个页面。
+   相比原来的 style.css（47 KB）这里只保留了这张单页真正用到的部分。
+   ========================================================================== */
+
+:root {
+  --ink: #0a1b2e;
+  --body: #4a5b70;
+  /* 对比度 5.01:1（白底）/ 4.75:1（--bg 底），过 WCAG AA 的 4.5:1。
+     原来的 #8496a8 只有 3.04:1 / 2.88:1，而它正好用在页头副标题、区块说明、
+     卡片标签、页脚这些 10.7–15.4px 的小字上 —— 是实打实的 AA 失败。 */
+  --muted: #5f7186;
+  --line: #e6ebf2;
+  --bg: #f7f9fc;
+
+  --brand: #01a1ac;
+  --brand-dark: #007c87;
+  --brand-soft: #e4f7f9;
+  --navy: #0a2745;
+  --wa: #25d366;
+
+  /* Inter 由 assets/css/fonts.css 本地提供（可变字体，覆盖 400–800）。
+     原先的 Google Fonts 链接还顺带请求了 Manrope，但它排在同一个字体栈的第二位，
+     Inter 覆盖全部字重，Manrope 永远不会被应用到 —— 已去掉：少一个第三方域名、
+     少一次阻塞首屏的跨域请求（fonts.googleapis.com 在中国大陆尤其不可靠）。
+     后面是系统字体兜底，"PingFang SC" / "Microsoft YaHei" 负责中文。 */
+  --font: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
+          "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", Roboto, Helvetica, Arial, sans-serif;
+
+  --radius: 14px;
+  --max: 760px;
+  --ease: cubic-bezier(.22, .61, .36, 1);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+* { margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+
+body {
+  font-family: var(--font);
+  font-size: 16.5px;
+  line-height: 1.75;
+  color: var(--body);
+  background: #fff;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+img { display: block; max-width: 100%; height: auto; }
+a { color: inherit; text-decoration: none; }
+ul { list-style: none; }
+
+:focus-visible { outline: 2px solid var(--brand); outline-offset: 3px; border-radius: 4px; }
+::selection { background: var(--navy); color: #fff; }
+
+.container { width: 100%; max-width: var(--max); margin-inline: auto; padding-inline: 24px; }
+.skip-link {
+  position: absolute; left: 50%; top: -60px; transform: translateX(-50%);
+  z-index: 99; padding: 10px 20px; background: var(--navy); color: #fff;
+  border-radius: 0 0 10px 10px; font-size: .9rem; font-weight: 600;
+  transition: top .2s var(--ease);
+}
+.skip-link:focus { top: 0; }
+
+/* icons ---------------------------------------------------------------- */
+.i {
+  width: 1.15em; height: 1.15em; flex: none;
+  fill: none; stroke: currentColor; stroke-width: 1.8;
+  stroke-linecap: round; stroke-linejoin: round;
+}
+.i--fill { fill: currentColor; stroke: none; }
+.icon-sprite { position: absolute; width: 0; height: 0; overflow: hidden; }
+
+/* ---------- header ---------- */
+.top {
+  border-bottom: 1px solid var(--line);
+  background: rgba(255, 255, 255, .92);
+  backdrop-filter: saturate(180%) blur(12px);
+  -webkit-backdrop-filter: saturate(180%) blur(12px);
+  position: sticky; top: 0; z-index: 20;
+}
+.top-in {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 16px; height: 74px;
+}
+.brand { display: flex; align-items: center; gap: 11px; }
+/* 标志图案本身是 1.38:1（479×347），不是正方形。写死 height:38px 会把图案
+   压在一个方框里、上下留白，视觉上就显得比文字低。只固定宽度、高度自适应。 */
+.brand img { width: 38px; height: auto; }
+.brand b { font-size: 1.12rem; font-weight: 800; color: var(--navy); letter-spacing: -.01em; display: block; line-height: 1.15; }
+.brand small { font-size: .67rem; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+.top-actions { display: flex; align-items: center; gap: 10px; }
+
+.lang {
+  display: inline-flex; align-items: center; gap: 6px;
+  height: 34px; padding: 0 13px; border-radius: 999px;
+  /* 边框是这条控件的唯一边界：--line 只有 1.2:1，达不到非文本对比度要求的 3:1 */
+  border: 1.5px solid var(--muted); background: #fff;
+  font-size: .84rem; font-weight: 650; color: var(--navy);
+  transition: all .2s var(--ease);
+}
+.lang:hover { border-color: var(--navy); background: var(--navy); color: #fff; }
+.lang .i { width: 15px; height: 15px; }
+
+/* ---------- buttons ---------- */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 9px;
+  padding: 12px 22px; border-radius: 999px;
+  font-size: .94rem; font-weight: 650; line-height: 1; white-space: nowrap;
+  background: var(--navy); color: #fff;
+  transition: transform .22s var(--ease), box-shadow .22s var(--ease), background-color .22s var(--ease);
+  box-shadow: 0 3px 12px rgba(10, 39, 69, .12);
+}
+.btn:hover { transform: translateY(-2px); box-shadow: 0 10px 26px rgba(10, 39, 69, .18); }
+.btn .i { width: 17px; height: 17px; }
+/* 白字配 #25d366 只有 1.98:1 —— 全站最想让人点的按钮，反而是最看不清的一处。
+   改成深蓝字：正常态 7.62:1、hover 5.85:1，既留住 WhatsApp 亮绿的识别度，
+   又满足 AA。若你更想保留白字，只要把上面的 --wa 换成 #0f7a6c（5.22:1）。 */
+.btn--wa { background: var(--wa); color: var(--navy); box-shadow: 0 3px 12px rgba(37, 211, 102, .3); }
+.btn--wa:hover { background: #1eb955; box-shadow: 0 10px 26px rgba(37, 211, 102, .38); }
+.btn--ghost { background: transparent; border: 1.5px solid var(--muted); color: var(--navy); box-shadow: none; }
+.btn--ghost:hover { border-color: var(--brand); color: var(--brand-dark); }
+.btn--lg { padding: 16px 30px; font-size: 1rem; }
+
+/* ---------- hero ---------- */
+.hero {
+  padding: 88px 0 72px;
+  background:
+    radial-gradient(760px 380px at 88% -10%, rgba(1, 161, 172, .13), transparent 65%),
+    radial-gradient(620px 340px at 4% 108%, rgba(255, 122, 51, .09), transparent 62%),
+    #fff;
+}
+.hero-in { max-width: 800px; }
+.tag {
+  display: inline-flex; align-items: center; gap: 9px;
+  padding: 7px 15px; border-radius: 999px;
+  background: var(--brand-soft); color: var(--brand-dark);
+  font-size: .8rem; font-weight: 700; letter-spacing: .04em;
+  margin-bottom: 22px;
+}
+.tag i { width: 7px; height: 7px; border-radius: 50%; background: var(--brand); display: block; }
+h1 {
+  font-size: clamp(1.95rem, 4.4vw, 3rem);
+  line-height: 1.2; letter-spacing: -.025em;
+  font-weight: 800; color: var(--ink);
+  margin-bottom: 20px;
+}
+h1 em { font-style: normal; color: var(--brand); }
+.hero p { font-size: 1.1rem; color: var(--body); max-width: 640px; }
+.hero-cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
+
+/* ---------- sections ---------- */
+.section { padding: 60px 0; }
+.section--alt { background: var(--bg); border-block: 1px solid var(--line); }
+.section-head { margin-bottom: 26px; }
+h2 {
+  font-size: 1.32rem; font-weight: 800; color: var(--ink);
+  letter-spacing: -.015em; line-height: 1.35;
+}
+.section-head p { margin-top: 8px; color: var(--muted); font-size: .96rem; }
+
+/* ---------- service list ---------- */
+.services { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px 34px; }
+.services li {
+  display: flex; gap: 12px; align-items: flex-start;
+  padding: 15px 0; border-bottom: 1px solid var(--line);
+  font-size: .96rem;
+}
+.services li::before {
+  content: ""; flex: none; width: 7px; height: 7px; border-radius: 50%;
+  background: var(--brand); margin-top: 9px;
+}
+.services strong { color: var(--ink); font-weight: 650; display: block; }
+.services span { color: var(--body); font-size: .93rem; }
+.services li > div { min-width: 0; }
+
+/* ---------- contact ---------- */
+.contact { display: grid; gap: 26px; }
+.contact-main {
+  background: linear-gradient(150deg, var(--navy), #0e3358);
+  color: rgba(255, 255, 255, .82);
+  border-radius: var(--radius);
+  padding: 34px 30px;
+}
+.contact-main h2 { color: #fff; }
+.contact-main p { color: rgba(255, 255, 255, .72); font-size: .96rem; margin-top: 10px; }
+.contact-main .btn { margin-top: 22px; }
+.contact-main .wa-num {
+  display: block; margin-top: 14px; font-size: 1.02rem; font-weight: 700;
+  color: #fff; letter-spacing: .01em;
+}
+
+/* 移除"工作时间"那张卡片后是 2 张；auto-fit 让 2 张能铺满，将来加回第 3 张也不会留空 */
+.rows { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 18px; }
+.row {
+  display: flex; gap: 12px; align-items: flex-start;
+  padding: 18px 20px; border: 1px solid var(--line); border-radius: var(--radius);
+  background: #fff;
+  transition: border-color .22s var(--ease), box-shadow .22s var(--ease);
+}
+.row:hover { border-color: rgba(1, 161, 172, .45); box-shadow: 0 8px 22px rgba(10, 39, 69, .07); }
+.row .ico {
+  width: 36px; height: 36px; border-radius: 10px; flex: none;
+  display: grid; place-items: center;
+  background: var(--brand-soft); color: var(--brand-dark);
+}
+.row .ico .i { width: 17px; height: 17px; }
+.row small { display: block; font-size: .76rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); font-weight: 700; }
+.row b { display: block; color: var(--ink); font-weight: 650; font-size: .95rem; word-break: break-word; }
+.row a { font-size: .95rem; color: var(--ink); font-weight: 650; }
+.row a:hover { color: var(--brand-dark); }
+.row span { font-size: .93rem; }
+
+/* ---------- footer ---------- */
+.foot {
+  border-top: 1px solid var(--line);
+  padding: 28px 0 34px; background: var(--bg);
+  font-size: .85rem; color: var(--muted);
+}
+.foot-in { display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap; }
+.foot a:hover { color: var(--brand-dark); }
+
+/* ---------- floating WhatsApp ---------- */
+.wa-float {
+  position: fixed; right: 22px; bottom: 22px; z-index: 30;
+  width: 54px; height: 54px; border-radius: 50%;
+  display: grid; place-items: center;
+  background: var(--wa); color: var(--navy);
+  box-shadow: 0 10px 26px rgba(37, 211, 102, .42);
+  transition: transform .22s var(--ease);
+}
+.wa-float:hover { transform: scale(1.07); }
+.wa-float .i { width: 27px; height: 27px; }
+
+/* ---------- Chinese typography ---------- */
+/* 汉字不能吃英文那套负字距，行高也要放宽 */
+html[lang^="zh"] body { line-height: 1.9; }
+html[lang^="zh"] h1 { letter-spacing: 0; line-height: 1.42; font-size: clamp(1.7rem, 3.8vw, 2.5rem); }
+html[lang^="zh"] h2 { letter-spacing: 0; }
+html[lang^="zh"] .brand b { letter-spacing: 0; }
+html[lang^="zh"] .brand small { letter-spacing: .08em; font-size: .7rem; }
+html[lang^="zh"] .hero p { line-height: 1.95; }
+html[lang^="zh"] .services li { align-items: flex-start; }
+html[lang^="zh"] .services strong { font-weight: 700; }
+html[lang^="zh"] .row small { letter-spacing: .06em; }
+
+/* ---------- responsive ---------- */
+@media (max-width: 760px) {
+  .rows { grid-template-columns: 1fr; }
+  .services { grid-template-columns: 1fr; }
+  .hero { padding: 60px 0 52px; }
+  .section { padding: 48px 0; }
+  .brand small { display: none; }
+  .contact-main { padding: 28px 22px; }
+  /* 悬浮 WhatsApp 按钮固定在右下角，窄屏滚动到联系区时会压住最后一张卡片 */
+  #contact { padding-bottom: 108px; }
+}
+@media (max-width: 460px) {
+  .top-in { height: 66px; }
+  .top .btn { display: none; }
+  .hero-cta .btn { width: 100%; }
+  .contact-main .btn { width: 100%; }
+  .wa-float { right: 16px; bottom: 16px; width: 50px; height: 50px; }
+  .wa-float .i { width: 25px; height: 25px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  * { transition-duration: .001ms !important; }
+  /* 只把时长压到 0 不够：hover 的位移与缩放照样会发生，直接取消位移 */
+  .btn:hover, .wa-float:hover { transform: none; }
+}
+
+@media print {
+  .top, .foot, .wa-float, .hero-cta { display: none; }
+  body { color: #000; }
+  .section { padding: 12px 0; }
+}
