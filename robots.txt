@@ -1,0 +1,14 @@
+# TQ Dropshipping — https://www.tqdropshipping.com/
+# 站点是纯静态页，没有任何需要登录的目录。
+
+User-agent: *
+Allow: /
+
+# 下面三条只是"万一传错东西"的兜底提示，不是保护措施：
+# 爬虫可以不理会 robots.txt，真正靠谱的做法是把这些目录挡在上传范围之外
+# （tools/build_dist.py 只按白名单复制文件，_archive/ 永远不会进 dist/）。
+Disallow: /_archive/
+Disallow: /_shots/
+Disallow: /tools/
+
+Sitemap: https://www.tqdropshipping.com/sitemap.xml
